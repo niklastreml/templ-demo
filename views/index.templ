@@ -2,13 +2,14 @@ package views
 
 import "htmx-templ/views/layout"
 import "htmx-templ/views/components"
+import "fmt"
 
-templ Index() {
+templ Index(nProjects int64) {
 	@layout.Main("Overview") {
 		<div class="grid grid-cols-1 gap-4 mb-4 sm:grid-cols-2 lg:grid-cols-3">
-			@components.Card("Projects", "10")
-			@components.Card("Dedicated Clusters", "0")
-			@components.Card("VClusters", "3")
+			@components.Card("Projects", fmt.Sprintf("%d", nProjects), "/projects")
+			@components.Card("Dedicated Clusters", "0", "/clusters")
+			@components.Card("VClusters", "3", "/vclusters")
 		</div>
 		<div class="mb-4 rounded-lg h-96">
 			<div class="w-full p-4 bg-white rounded-lg shadow dark:bg-gray-800 md:p-6">
@@ -56,7 +57,7 @@ templ Index() {
 
 script graph(months []string, costs []float64) {
     // ApexCharts options and config
-    window.addEventListener("load", function () {
+    htmx.onLoad(function () {
         let options = {
             chart: {
                 height: "100%",
@@ -124,8 +125,10 @@ script graph(months []string, costs []float64) {
     },
         }
 
-        if (document.getElementById("area-chart") && typeof ApexCharts !== 'undefined') {
-        const chart = new ApexCharts(document.getElementById("area-chart"), options);
+        const $target = document.getElementById("area-chart") 
+        if ($target && $target.innerHTML === "" && typeof ApexCharts !== 'undefined') {
+            console.log("rendering")
+        const chart = new ApexCharts($target, options);
         chart.render();
     }
     });

@@ -23,3 +23,7 @@ func (s *ProjectService) OrderProject(ctx context.Context, p sqlc.NewProjectPara
 func (s *ProjectService) ListProjects(ctx context.Context) ([]sqlc.Project, error) {
 	return s.repo.ListAll(ctx)
 }
+
+func (s *ProjectService) CountProjects(ctx context.Context) (int64, error) {
+	return s.repo.Count(ctx)
+}

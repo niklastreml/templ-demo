@@ -13,8 +13,8 @@ import (
 
 func SetupControllers(app *fiber.App) {
 	ps := project.NewProjectService(repo.NewProjectRepo())
-	controllers.NewIndex().Register(app)
-	controllers.NewProjects(*ps).Register(app)
+	controllers.NewIndex(ps).Register(app)
+	controllers.NewProjects(ps).Register(app)
 	app.Use(NotFoundMiddleware)
 }
 

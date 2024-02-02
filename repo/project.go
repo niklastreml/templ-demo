@@ -14,6 +14,7 @@ type ProjectRepo interface {
 	Create(context.Context, sqlc.NewProjectParams) (sqlc.Project, error)
 	Update(context.Context, sqlc.UpdateProjectParams) (sqlc.Project, error)
 	Delete(context.Context, int32) error
+	Count(context.Context) (int64, error)
 }
 
 type Project struct {
@@ -41,4 +42,8 @@ func (p *Project) Update(ctx context.Context, arg sqlc.UpdateProjectParams) (sql
 
 func (p *Project) Delete(ctx context.Context, id int32) error {
 	return sqlc.New(database.DB).DeleteProject(ctx, id)
+}
+
+func (p *Project) Count(ctx context.Context) (int64, error) {
+	return sqlc.New(database.DB).CountProjects(ctx)
 }

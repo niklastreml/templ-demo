@@ -9,10 +9,10 @@ import (
 )
 
 type ProjectController struct {
-	ps project.ProjectService
+	ps *project.ProjectService
 }
 
-func NewProjects(ps project.ProjectService) *ProjectController {
+func NewProjects(ps *project.ProjectService) *ProjectController {
 	return &ProjectController{ps}
 }
 
@@ -36,6 +36,7 @@ func (p *ProjectController) NewProject(c *fiber.Ctx) error {
 		return err
 	}
 
+	np.Storage = np.Storage * 1024
 	proj, err := p.ps.OrderProject(c.Context(), np)
 	if err != nil {
 		return err

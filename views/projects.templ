@@ -70,7 +70,7 @@ templ modal() {
 					</button>
 				</div>
 				<!-- Modal body -->
-				<form hx-post="/projects" hx-target="#projectlist" hx-swap="beforeend" class="p-4 md:p-5" hx->
+				<form id="order" hx-trigger="submit" hx-target="#projectlist" hx-swap="beforeend" class="p-4 md:p-5" hx->
 					<div class="grid grid-cols-2 gap-4 mb-4">
 						<div class="col-span-2">
 							<label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name</label>
@@ -94,6 +94,7 @@ templ modal() {
 			</div>
 		</div>
 	</div>
+	@closeModal()
 }
 
 templ datainput(name, unit, placeholder, inputtype string) {
@@ -104,4 +105,14 @@ templ datainput(name, unit, placeholder, inputtype string) {
 			<span class="p-2.5 ml-0 w-16 text-center text-sm text-gray-500 border border-gray-300 rounded-r-lg bg-gray-50 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-gray-300">{ unit }</span>
 		</div>
 	</div>
+}
+
+script closeModal() {
+	htmx.onLoad(() => {
+		htmx.on("#order", "submit", (e)=> {
+			const $targetEl = document.getElementById('crud-modal');
+			const modal = new Modal($targetEl)
+			modal.hide()
+		})
+	})
 }

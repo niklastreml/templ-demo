@@ -5,11 +5,12 @@ import (
 	"htmx-templ/database"
 	"htmx-templ/routes"
 	"io/fs"
+	"log"
 	"net/http"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/log"
 	"github.com/gofiber/fiber/v2/middleware/filesystem"
+	"github.com/gofiber/fiber/v2/middleware/logger"
 )
 
 //go:embed static
@@ -30,6 +31,7 @@ func main() {
 		Browse: true,
 		MaxAge: -1,
 	}))
+	app.Use(logger.New())
 
 	routes.SetupControllers(app)
 
