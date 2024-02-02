@@ -16,7 +16,11 @@ build-server: cleanup gen
 
 
 db:
-	docker-compose up -d
+	docker-compose up -d --wait
+
+db-up: db migrate-up
+	@echo "Database is up and migrated"
+
 logs:
 	docker-compose logs -f
 

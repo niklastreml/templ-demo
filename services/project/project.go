@@ -27,3 +27,7 @@ func (s *ProjectService) ListProjects(ctx context.Context) ([]sqlc.Project, erro
 func (s *ProjectService) CountProjects(ctx context.Context) (int64, error) {
 	return s.repo.Count(ctx)
 }
+
+func (s *ProjectService) FindProjectById(ctx context.Context, id int32) (sqlc.Project, error) {
+	return s.repo.Find(ctx, id)
+}

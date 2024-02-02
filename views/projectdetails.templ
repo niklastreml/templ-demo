@@ -1,0 +1,11 @@
+
+
+package views
+
+import "htmx-templ/views/layout"
+import "htmx-templ/database/sqlc"
+
+templ ProjectDetails(p sqlc.Project) {
+	@layout.Main(p.Name) {
+	}
+}

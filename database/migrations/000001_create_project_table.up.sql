@@ -6,5 +6,6 @@ CREATE TABLE IF NOT EXISTS project(
     -- in MiB
     memory bigint not null,
     -- in MiB
-    storage bigint not null
+    storage bigint not null,
+    cluster varchar not null
 )

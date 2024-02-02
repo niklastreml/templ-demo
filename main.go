@@ -7,6 +7,7 @@ import (
 	"io/fs"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/filesystem"
@@ -32,6 +33,10 @@ func main() {
 		MaxAge: -1,
 	}))
 	app.Use(logger.New())
+	app.Use(func(c *fiber.Ctx) error {
+		time.Sleep(2 * time.Second)
+		return c.Next()
+	})
 
 	routes.SetupControllers(app)
 

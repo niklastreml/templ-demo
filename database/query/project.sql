@@ -1,6 +1,6 @@
 -- name: NewProject :one
-INSERT INTO project (name, cpu, memory, storage)
-VALUES ($1, $2, $3, $4)
+INSERT INTO project (name, cpu, memory, storage, cluster)
+VALUES ($1, $2, $3, $4, $5)
 RETURNING *;
 -- name: GetProjects :many
 SELECT *

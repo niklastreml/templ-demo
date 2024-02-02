@@ -12,4 +12,5 @@ type Project struct {
 	Cpu     int64
 	Memory  int64
 	Storage int64
+	Cluster string
 }

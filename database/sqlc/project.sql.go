@@ -32,7 +32,7 @@ func (q *Queries) DeleteProject(ctx context.Context, id int32) error {
 }
 
 const getProject = `-- name: GetProject :one
-SELECT id, name, cpu, memory, storage
+SELECT id, name, cpu, memory, storage, cluster
 FROM project
 WHERE id = $1
 `
@@ -46,12 +46,13 @@ func (q *Queries) GetProject(ctx context.Context, id int32) (Project, error) {
 		&i.Cpu,
 		&i.Memory,
 		&i.Storage,
+		&i.Cluster,
 	)
 	return i, err
 }
 
 const getProjects = `-- name: GetProjects :many
-SELECT id, name, cpu, memory, storage
+SELECT id, name, cpu, memory, storage, cluster
 FROM project
 `
 
@@ -70,6 +71,7 @@ func (q *Queries) GetProjects(ctx context.Context) ([]Project, error) {
 			&i.Cpu,
 			&i.Memory,
 			&i.Storage,
+			&i.Cluster,
 		); err != nil {
 			return nil, err
 		}
@@ -85,9 +87,9 @@ func (q *Queries) GetProjects(ctx context.Context) ([]Project, error) {
 }
 
 const newProject = `-- name: NewProject :one
-INSERT INTO project (name, cpu, memory, storage)
-VALUES ($1, $2, $3, $4)
-RETURNING id, name, cpu, memory, storage
+INSERT INTO project (name, cpu, memory, storage, cluster)
+VALUES ($1, $2, $3, $4, $5)
+RETURNING id, name, cpu, memory, storage, cluster
 `
 
 type NewProjectParams struct {
@@ -95,6 +97,7 @@ type NewProjectParams struct {
 	Cpu     int64
 	Memory  int64
 	Storage int64
+	Cluster string
 }
 
 func (q *Queries) NewProject(ctx context.Context, arg NewProjectParams) (Project, error) {
@@ -103,6 +106,7 @@ func (q *Queries) NewProject(ctx context.Context, arg NewProjectParams) (Project
 		arg.Cpu,
 		arg.Memory,
 		arg.Storage,
+		arg.Cluster,
 	)
 	var i Project
 	err := row.Scan(
@@ -111,6 +115,7 @@ func (q *Queries) NewProject(ctx context.Context, arg NewProjectParams) (Project
 		&i.Cpu,
 		&i.Memory,
 		&i.Storage,
+		&i.Cluster,
 	)
 	return i, err
 }
@@ -119,7 +124,7 @@ const updateProject = `-- name: UpdateProject :one
 UPDATE project
 SET name = $1
 WHERE id = $2
-RETURNING id, name, cpu, memory, storage
+RETURNING id, name, cpu, memory, storage, cluster
 `
 
 type UpdateProjectParams struct {
@@ -136,6 +141,7 @@ func (q *Queries) UpdateProject(ctx context.Context, arg UpdateProjectParams) (P
 		&i.Cpu,
 		&i.Memory,
 		&i.Storage,
+		&i.Cluster,
 	)
 	return i, err
 }
