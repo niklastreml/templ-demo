@@ -7,6 +7,9 @@ package sqlc
 import ()
 
 type Project struct {
-	ID   int32
-	Name string
+	ID      int32
+	Name    string
+	Cpu     int64
+	Memory  int64
+	Storage int64
 }

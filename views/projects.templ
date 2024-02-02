@@ -1,8 +1,53 @@
 package views
 
 import "htmx-templ/views/layout"
+import "htmx-templ/database/sqlc"
+import "fmt"
 
-templ Projects() {
+templ Projects(projects []sqlc.Project) {
 	@layout.Main("Projects") {
+		<h1 class="text-lg">Projects</h1>
+		<div class="flex flex-wrap justify-center">
+			<a href="#">
+				<div class="flex items-center justify-center p-6 m-5 transition-all bg-transparent border-2 border-gray-200 border-dashed rounded-lg select-none dark:hover:bg-gray-800 active:scale-95 hover:scale-105 hover:bg-white hover:border-solid hover:shadow-md w-72 h-72 dark:border-gray-700">
+					<div class="m-auto text-center text-9xl">+</div>
+				</div>
+			</a>
+			for _, p := range projects {
+				@card(p)
+			}
+		</div>
 	}
+}
+
+templ card(p sqlc.Project) {
+	<div class="flex flex-col justify-between p-6 m-5 bg-white border border-gray-200 rounded-lg shadow group w-72 h-72 dark:bg-gray-800 dark:border-gray-700">
+		<a href="#">
+			<h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{ p.Name }</h5>
+		</a>
+		<table class="font-normal text-gray-700 dark:text-gray-400">
+			<tbody>
+				<tr>
+					<th class="text-left">CPU</th>
+					<td class="text-right">{ fmt.Sprintf("%d mCPU",p.Cpu ) }</td>
+				</tr>
+				<tr>
+					<th class="text-left">Memory</th>
+					<td class="text-right">{ fmt.Sprintf("%.2f GiB",float32(p.Memory) / 1024.0) }</td>
+				</tr>
+				<tr>
+					<th class="text-left">Storage</th>
+					<td class="text-right">{ fmt.Sprintf("%.2f GiB",float32(p.Storage) / 1024.0) }</td>
+				</tr>
+			</tbody>
+		</table>
+		<div class="flex justify-end">
+			<a href="#" class="inline-flex items-center px-3 py-2 text-sm font-medium text-right text-white bg-transparent border border-blue-700 rounded-lg group-hover:bg-blue-700 group-hover:dark:bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+				Details
+				<svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+					<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"></path>
+				</svg>
+			</a>
+		</div>
+	</div>
 }

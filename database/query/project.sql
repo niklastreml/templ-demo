@@ -1,6 +1,6 @@
 -- name: NewProject :one
-INSERT INTO project (name)
-VALUES ($1)
+INSERT INTO project (name, cpu, memory, storage)
+VALUES ($1, $2, $3, $4)
 RETURNING *;
 -- name: GetProjects :many
 SELECT *
@@ -17,3 +17,6 @@ RETURNING *;
 -- name: DeleteProject :exec
 DELETE FROM project
 WHERE id = $1;
+-- name: CountProjects :one
+SELECT COUNT(*)
+FROM project;

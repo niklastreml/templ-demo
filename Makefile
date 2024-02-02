@@ -11,7 +11,7 @@ gen-templ: gen-sqlc
 gen-sqlc:
 	sqlc generate
 
-build-server: gen
+build-server: cleanup gen
 	go build -o tmp/app ./	
 
 
@@ -32,3 +32,6 @@ migrate-down:
 
 generate-sqlc:
 	sqlc generate
+
+cleanup:
+	rm -rf tmp

@@ -9,6 +9,18 @@ import (
 	"context"
 )
 
+const countProjects = `-- name: CountProjects :one
+SELECT COUNT(*)
+FROM project
+`
+
+func (q *Queries) CountProjects(ctx context.Context) (int64, error) {
+	row := q.db.QueryRowContext(ctx, countProjects)
+	var count int64
+	err := row.Scan(&count)
+	return count, err
+}
+
 const deleteProject = `-- name: DeleteProject :exec
 DELETE FROM project
 WHERE id = $1
@@ -20,7 +32,7 @@ func (q *Queries) DeleteProject(ctx context.Context, id int32) error {
 }
 
 const getProject = `-- name: GetProject :one
-SELECT id, name
+SELECT id, name, cpu, memory, storage
 FROM project
 WHERE id = $1
 `
@@ -28,12 +40,18 @@ WHERE id = $1
 func (q *Queries) GetProject(ctx context.Context, id int32) (Project, error) {
 	row := q.db.QueryRowContext(ctx, getProject, id)
 	var i Project
-	err := row.Scan(&i.ID, &i.Name)
+	err := row.Scan(
+		&i.ID,
+		&i.Name,
+		&i.Cpu,
+		&i.Memory,
+		&i.Storage,
+	)
 	return i, err
 }
 
 const getProjects = `-- name: GetProjects :many
-SELECT id, name
+SELECT id, name, cpu, memory, storage
 FROM project
 `
 
@@ -46,7 +64,13 @@ func (q *Queries) GetProjects(ctx context.Context) ([]Project, error) {
 	var items []Project
 	for rows.Next() {
 		var i Project
-		if err := rows.Scan(&i.ID, &i.Name); err != nil {
+		if err := rows.Scan(
+			&i.ID,
+			&i.Name,
+			&i.Cpu,
+			&i.Memory,
+			&i.Storage,
+		); err != nil {
 			return nil, err
 		}
 		items = append(items, i)
@@ -61,15 +85,33 @@ func (q *Queries) GetProjects(ctx context.Context) ([]Project, error) {
 }
 
 const newProject = `-- name: NewProject :one
-INSERT INTO project (name)
-VALUES ($1)
-RETURNING id, name
+INSERT INTO project (name, cpu, memory, storage)
+VALUES ($1, $2, $3, $4)
+RETURNING id, name, cpu, memory, storage
 `
 
-func (q *Queries) NewProject(ctx context.Context, name string) (Project, error) {
-	row := q.db.QueryRowContext(ctx, newProject, name)
+type NewProjectParams struct {
+	Name    string
+	Cpu     int64
+	Memory  int64
+	Storage int64
+}
+
+func (q *Queries) NewProject(ctx context.Context, arg NewProjectParams) (Project, error) {
+	row := q.db.QueryRowContext(ctx, newProject,
+		arg.Name,
+		arg.Cpu,
+		arg.Memory,
+		arg.Storage,
+	)
 	var i Project
-	err := row.Scan(&i.ID, &i.Name)
+	err := row.Scan(
+		&i.ID,
+		&i.Name,
+		&i.Cpu,
+		&i.Memory,
+		&i.Storage,
+	)
 	return i, err
 }
 
@@ -77,7 +119,7 @@ const updateProject = `-- name: UpdateProject :one
 UPDATE project
 SET name = $1
 WHERE id = $2
-RETURNING id, name
+RETURNING id, name, cpu, memory, storage
 `
 
 type UpdateProjectParams struct {
@@ -88,6 +130,12 @@ type UpdateProjectParams struct {
 func (q *Queries) UpdateProject(ctx context.Context, arg UpdateProjectParams) (Project, error) {
 	row := q.db.QueryRowContext(ctx, updateProject, arg.Name, arg.ID)
 	var i Project
-	err := row.Scan(&i.ID, &i.Name)
+	err := row.Scan(
+		&i.ID,
+		&i.Name,
+		&i.Cpu,
+		&i.Memory,
+		&i.Storage,
+	)
 	return i, err
 }
