@@ -32,13 +32,13 @@ templ loading() {
 }
 
 templ card(p sqlc.Project) {
-	<div class="flex flex-col justify-between p-6 m-5 bg-white border border-gray-200 rounded-lg shadow group w-72 h-72 dark:bg-gray-800 dark:border-gray-700">
+	<div class="flex flex-col justify-between p-6 m-5 transition-all bg-white border border-gray-200 rounded-lg shadow hover:shadow-lg group w-72 h-72 dark:bg-gray-800 dark:border-gray-700">
 		<div class="flex items-center justify-between">
 			<div>
 				<h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{ p.Name }</h5>
 			</div>
 			<div>
-				<span class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300">{ p.Cluster }</span>
+				<span class=" bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300">{ p.Cluster }</span>
 			</div>
 		</div>
 		<table class="font-normal text-gray-700 dark:text-gray-400">
@@ -58,7 +58,7 @@ templ card(p sqlc.Project) {
 			</tbody>
 		</table>
 		<div class="flex justify-end">
-			<a href={ templ.SafeURL(fmt.Sprintf("/projects/%d", p.ID)) } class="inline-flex items-center px-3 py-2 text-sm font-medium text-right text-white bg-transparent border border-blue-700 rounded-lg group-hover:bg-blue-700 group-hover:dark:bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+			<a href={ templ.SafeURL(fmt.Sprintf("/projects/%d", p.ID)) } class="inline-flex items-center px-3 py-2 text-sm font-medium text-right text-black bg-transparent border border-blue-700 rounded-lg hover:scale-105 group-hover:text-white dark:text-white group-hover:bg-blue-700 group-hover:dark:bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
 				Details
 				<svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
 					<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"></path>

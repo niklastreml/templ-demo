@@ -60,6 +60,7 @@ templ Sidebar() {
 							@icons.Clipboard()
 						</span>
 						<span class="ml-3">Projects</span>
+						<span class="bg-blue-100 ml-2 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300" hx-get="/projects/count" hx-trigger="load,project-created from:body">...</span>
 					</a>
 				</li>
 				<li>

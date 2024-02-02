@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"htmx-templ/database/sqlc"
 	"htmx-templ/services/project"
 	"htmx-templ/views"
@@ -21,6 +22,7 @@ func (p *ProjectController) Register(app *fiber.App) {
 	app.Get("/projects", p.Index)
 	app.Get("/projects/:id<int>", p.Details)
 	app.Post("/projects", p.NewProject)
+	app.Get("/projects/count", p.CountOnly)
 }
 
 func (p *ProjectController) Index(c *fiber.Ctx) error {
@@ -46,6 +48,7 @@ func (p *ProjectController) NewProject(c *fiber.Ctx) error {
 		return err
 	}
 
+	c.Response().Header.Add("HX-Trigger", "project-created")
 	return views.Render(c, views.ProjectOrdered(proj))
 }
 
@@ -62,4 +65,14 @@ func (p *ProjectController) Details(c *fiber.Ctx) error {
 	}
 
 	return views.Render(c, views.ProjectDetails(project))
+}
+
+func (p *ProjectController) CountOnly(c *fiber.Ctx) error {
+	count, err := p.ps.CountProjects(c.Context())
+	if err != nil {
+		return err
+	}
+
+	c.WriteString(fmt.Sprintf("%d", count))
+	return nil
 }
