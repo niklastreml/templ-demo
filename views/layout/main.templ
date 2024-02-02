@@ -1,0 +1,11 @@
+package layout
+
+templ Main(title string) {
+	@Shell(title) {
+		@Navbar()
+		@Sidebar()
+		<main class="h-auto p-4 pt-20 md:ml-64 ">
+			{ children... }
+		</main>
+	}
+}

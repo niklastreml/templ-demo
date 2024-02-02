@@ -1,5 +1,9 @@
 package views
 
+import "htmx-templ/views/layout"
+
 templ NotFound() {
-		<h1>404 Not Found</h1>
+	@layout.Shell("Not Found") {
+		<h1 class="text-red-700">404 Not Found</h1>
+	}
 }

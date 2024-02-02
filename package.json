@@ -1,8 +1,11 @@
 {
   "scripts": {
-		"build": "tailwindcss build -i ./views/styles.css -o ./static/css/tailwind.css"
+    "build": "tailwindcss build -i ./views/styles.css -o ./static/css/tailwind.css"
   },
   "devDependencies": {
     "tailwindcss": "^3.4.1"
+  },
+  "dependencies": {
+    "flowbite": "^2.2.1"
   }
 }
