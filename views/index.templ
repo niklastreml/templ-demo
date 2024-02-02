@@ -1,0 +1,8 @@
+package views
+
+import "htmx-templ/views/layout"
+templ Index() {
+	@layout.Shell(layout.ShellProps{Title: "hello"}) {
+			<h1 class="text-6xl text-telekom">Hello from templ</h1>
+	}
+}

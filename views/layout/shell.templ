@@ -1,0 +1,23 @@
+package layout
+
+type ShellProps struct {
+    Title string
+}
+templ Shell(props ShellProps) {
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <link rel="stylesheet" href="/static/css/tailwind.css"/>
+        <link rel="stylesheet" href="/static/css/flowbite.min.css"/>
+        <script defer src="/static/js/flowbite.min.js"/>
+        <script src="/static/js/htmx.org@1.9.10"/>
+        <title>{ props.Title }</title>
+    </head>
+    <body>
+    { children...}
+    </body>
+    </html>
+
+}
