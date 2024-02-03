@@ -39,3 +39,29 @@ generate-sqlc:
 
 cleanup:
 	rm -rf tmp
+
+pre-install:
+	@command -v templ > /dev/null; \
+	if [ $$? -ne 0 ]; then \
+		echo "templ not found, installing..."; \
+		go install github.com/a-h/templ/cmd/templ@latest; \
+		echo "Successfully installed templ"; \
+	else \
+		echo "templ is already installed"; \
+	fi
+	@command -v sqlc > /dev/null; \
+	if [ $$? -ne 0 ]; then \
+		echo "sqlc not found, installing..."; \
+		go install github.com/sqlc-dev/sqlc/cmd/sqlc@latest; \
+		echo "Successfully installed sqlc"; \
+	else \
+		echo "sqlc is already installed"; \
+	fi
+	@command -v migrate > /dev/null; \
+	if [ $$? -ne 0 ]; then \
+		echo "migrate not found, installing..."; \
+		go install -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@latest; \
+		echo "Successfully installed migrate"; \
+	else \
+		echo "migrate is already installed"; \
+	fi
