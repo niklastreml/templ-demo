@@ -3,7 +3,8 @@ fmt:
 	templ fmt .
 
 build-js:
-		npm run build 
+	npm i
+	npm run build 
 
 gen-templ: gen-sqlc
 	templ generate
@@ -13,7 +14,6 @@ gen-sqlc:
 
 build-server: cleanup gen
 	go build -o tmp/app ./	
-
 
 db:
 	docker-compose up -d --wait
@@ -27,7 +27,7 @@ logs:
 dev:
 	air
 
-gen: fmt build-js gen-templ gen-sqlc
+gen: pre-install fmt build-js gen-templ gen-sqlc
 
 migrate-up:
 	migrate -path database/migrations -database "postgresql://user:password@localhost:5432/caas?sslmode=disable" -verbose up
