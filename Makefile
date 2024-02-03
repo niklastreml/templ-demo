@@ -3,7 +3,6 @@ fmt:
 	templ fmt .
 
 build-js:
-	npm i
 	npm run build 
 
 gen-templ: gen-sqlc
@@ -24,10 +23,10 @@ db-up: db migrate-up
 logs:
 	docker-compose logs -f
 
-dev:
+dev: pre-install
 	air
 
-gen: pre-install fmt build-js gen-templ gen-sqlc
+gen: fmt build-js gen-templ gen-sqlc
 
 migrate-up:
 	migrate -path database/migrations -database "postgresql://user:password@localhost:5432/caas?sslmode=disable" -verbose up
@@ -65,3 +64,18 @@ pre-install:
 	else \
 		echo "migrate is already installed"; \
 	fi
+	@command -v air > /dev/null; \
+	if [ $$? -ne 0 ]; then \
+		echo "air not found, installing..."; \
+		go install github.com/cosmtrek/air@latest; \
+		echo "Successfully installed air"; \
+	else \
+		echo "air is already installed"; \
+	fi
+	@command -v npm > /dev/null; \
+	if [ $$? -ne 0 ]; then \
+		echo "npm not found, exiting..."; \
+		exit 1; \
+	fi
+	npm i
+
