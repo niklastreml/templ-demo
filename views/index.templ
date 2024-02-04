@@ -4,11 +4,11 @@ import "htmx-templ/views/layout"
 import "htmx-templ/views/components"
 import "fmt"
 
-templ Index(nProjects int64) {
+templ Index(nProjects int64, nClusters int64) {
 	@layout.Main("Overview") {
 		<div class="grid grid-cols-1 gap-4 mb-4 sm:grid-cols-2 lg:grid-cols-3">
 			@components.Card("Projects", fmt.Sprintf("%d", nProjects), "/projects")
-			@components.Card("Dedicated Clusters", "0", "/clusters")
+			@components.Card("Dedicated Clusters", fmt.Sprintf("%d", nClusters), "/clusters")
 			@components.Card("VClusters", "3", "/vclusters")
 		</div>
 		<div class="mb-4 rounded-lg h-96">

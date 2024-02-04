@@ -4,7 +4,165 @@
 
 package sqlc
 
-import ()
+import (
+	"database/sql"
+	"database/sql/driver"
+	"fmt"
+)
+
+type Operationalmodel string
+
+const (
+	OperationalmodelUNKNOWN  Operationalmodel = "UNKNOWN"
+	OperationalmodelDE3      Operationalmodel = "DE3"
+	OperationalmodelDE4      Operationalmodel = "DE4"
+	OperationalmodelDE4VSNFD Operationalmodel = "DE4_VSNFD"
+	OperationalmodelDE6      Operationalmodel = "DE6"
+)
+
+func (e *Operationalmodel) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = Operationalmodel(s)
+	case string:
+		*e = Operationalmodel(s)
+	default:
+		return fmt.Errorf("unsupported scan type for Operationalmodel: %T", src)
+	}
+	return nil
+}
+
+type NullOperationalmodel struct {
+	Operationalmodel Operationalmodel
+	Valid            bool // Valid is true if Operationalmodel is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullOperationalmodel) Scan(value interface{}) error {
+	if value == nil {
+		ns.Operationalmodel, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.Operationalmodel.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullOperationalmodel) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.Operationalmodel), nil
+}
+
+type Platform string
+
+const (
+	PlatformUNKNOWN Platform = "UNKNOWN"
+	PlatformAWS     Platform = "AWS"
+	PlatformGCP     Platform = "GCP"
+)
+
+func (e *Platform) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = Platform(s)
+	case string:
+		*e = Platform(s)
+	default:
+		return fmt.Errorf("unsupported scan type for Platform: %T", src)
+	}
+	return nil
+}
+
+type NullPlatform struct {
+	Platform Platform
+	Valid    bool // Valid is true if Platform is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullPlatform) Scan(value interface{}) error {
+	if value == nil {
+		ns.Platform, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.Platform.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullPlatform) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.Platform), nil
+}
+
+type Workertype string
+
+const (
+	WorkertypeUNKNOWN           Workertype = "UNKNOWN"
+	WorkertypeSMALL             Workertype = "SMALL"
+	WorkertypeSMALLCPUHEAVY     Workertype = "SMALL_CPU_HEAVY"
+	WorkertypeSMALLMEMORYHEAVY  Workertype = "SMALL_MEMORY_HEAVY"
+	WorkertypeMEDIUM            Workertype = "MEDIUM"
+	WorkertypeMEDIUMCPUHEAVY    Workertype = "MEDIUM_CPU_HEAVY"
+	WorkertypeMEDIUMMEMORYHEAVY Workertype = "MEDIUM_MEMORY_HEAVY"
+	WorkertypeLARGE             Workertype = "LARGE"
+	WorkertypeLARGECPUHEAVY     Workertype = "LARGE_CPU_HEAVY"
+	WorkertypeLARGEMEMORYHEAVY  Workertype = "LARGE_MEMORY_HEAVY"
+)
+
+func (e *Workertype) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = Workertype(s)
+	case string:
+		*e = Workertype(s)
+	default:
+		return fmt.Errorf("unsupported scan type for Workertype: %T", src)
+	}
+	return nil
+}
+
+type NullWorkertype struct {
+	Workertype Workertype
+	Valid      bool // Valid is true if Workertype is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullWorkertype) Scan(value interface{}) error {
+	if value == nil {
+		ns.Workertype, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.Workertype.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullWorkertype) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.Workertype), nil
+}
+
+type Cluster struct {
+	ID                int32
+	Name              string
+	PspElement        string
+	OperationalModel  Operationalmodel
+	Platform          Platform
+	WorkerType        Workertype
+	IsGpuWorker       bool
+	MaxWorkerCount    int32
+	WorkerCountNumber sql.NullInt64
+	LonghornStorage   int64
+	NfsStorage        sql.NullInt64
+	Reason            string
+	NotesText         sql.NullString
+}
 
 type Project struct {
 	ID      int32

@@ -6,28 +6,28 @@ import (
 	"htmx-templ/repo"
 )
 
-type ProjectService struct {
+type Service struct {
 	repo repo.ProjectRepo
 }
 
-func NewProjectService(repo repo.ProjectRepo) *ProjectService {
-	return &ProjectService{
+func NewProjectService(repo repo.ProjectRepo) *Service {
+	return &Service{
 		repo: repo,
 	}
 }
 
-func (s *ProjectService) OrderProject(ctx context.Context, p sqlc.NewProjectParams) (sqlc.Project, error) {
+func (s *Service) OrderProject(ctx context.Context, p sqlc.NewProjectParams) (sqlc.Project, error) {
 	return s.repo.Create(ctx, p)
 }
 
-func (s *ProjectService) ListProjects(ctx context.Context) ([]sqlc.Project, error) {
+func (s *Service) ListProjects(ctx context.Context) ([]sqlc.Project, error) {
 	return s.repo.ListAll(ctx)
 }
 
-func (s *ProjectService) CountProjects(ctx context.Context) (int64, error) {
+func (s *Service) CountProjects(ctx context.Context) (int64, error) {
 	return s.repo.Count(ctx)
 }
 
-func (s *ProjectService) FindProjectById(ctx context.Context, id int32) (sqlc.Project, error) {
+func (s *Service) FindProjectById(ctx context.Context, id int32) (sqlc.Project, error) {
 	return s.repo.Find(ctx, id)
 }

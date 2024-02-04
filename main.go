@@ -1,29 +1,38 @@
 package main
 
 import (
+	"context"
 	"embed"
 	"htmx-templ/database"
 	"htmx-templ/routes"
 	"io/fs"
-	"log"
 	"net/http"
+	"os"
 	"time"
 
+	"github.com/charmbracelet/log"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/filesystem"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 )
 
+const port = ":3000"
+
 //go:embed static
 var staticFS embed.FS
 
 func main() {
-	if err := database.ConnectDB(); err != nil {
+	l := log.New(os.Stdout)
+	ctx := log.WithContext(context.Background(), l)
+
+	if err := database.Connect(ctx); err != nil {
+		l.Error("Error while connecting to the database", "error", err)
 		panic(err)
 	}
 	app := fiber.New()
 	staticfs, err := fs.Sub(staticFS, "static")
 	if err != nil {
+		l.Error("Error while opening static filesystem", "error", err)
 		panic(err)
 	}
 
@@ -38,7 +47,12 @@ func main() {
 		return c.Next()
 	})
 
-	routes.SetupControllers(app)
+	hs := routes.NewHandlers()
+	hs.Setup(app)
+	app.Use(routes.NotFoundMiddleware)
 
-	log.Fatal(app.Listen(":3000"))
+	if err := app.Listen(port); err != nil {
+		l.Error("Error while running web server", "port", port, "error", err)
+		os.Exit(1)
+	}
 }

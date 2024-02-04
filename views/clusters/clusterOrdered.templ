@@ -1,0 +1,8 @@
+package clusters
+
+import "htmx-templ/database/sqlc"
+
+templ ClusterOrdered(c sqlc.Cluster) {
+	@card(c)
+	@loading()
+}

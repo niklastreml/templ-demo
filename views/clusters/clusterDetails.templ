@@ -1,0 +1,9 @@
+package clusters
+
+import "htmx-templ/views/layout"
+import "htmx-templ/database/sqlc"
+
+templ ClusterDetails(c sqlc.Cluster) {
+	@layout.Main(c.Name) {
+	}
+}
