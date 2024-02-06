@@ -14,6 +14,9 @@ gen-sqlc:
 build-server: cleanup gen
 	go build -o tmp/app ./	
 
+new-migration:
+	migrate create -ext sql -dir ./database/migrations -seq $(name)
+
 db:
 	docker-compose up -d --wait
 

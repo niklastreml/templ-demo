@@ -4,6 +4,7 @@ import (
 	"htmx-templ/controllers"
 	"htmx-templ/repo"
 	"htmx-templ/services/project"
+	"htmx-templ/services/search"
 	"htmx-templ/views"
 	"net/http"
 
@@ -13,8 +14,10 @@ import (
 
 func SetupControllers(app *fiber.App) {
 	ps := project.NewProjectService(repo.NewProjectRepo())
+	ss := search.NewSearchService(repo.NewSearchRepo())
 	controllers.NewIndex(ps).Register(app)
 	controllers.NewProjects(ps).Register(app)
+	controllers.NewSearch(ss).Register(app)
 	app.Use(NotFoundMiddleware)
 }
 

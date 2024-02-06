@@ -31,6 +31,40 @@ func (q *Queries) DeleteProject(ctx context.Context, id int32) error {
 	return err
 }
 
+const fuzzyFindProjects = `-- name: FuzzyFindProjects :many
+SELECT id, name, cpu, memory, storage, cluster FROM project WHERE similarity(name, $1) > 0.15
+`
+
+func (q *Queries) FuzzyFindProjects(ctx context.Context, similarity string) ([]Project, error) {
+	rows, err := q.db.QueryContext(ctx, fuzzyFindProjects, similarity)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Project
+	for rows.Next() {
+		var i Project
+		if err := rows.Scan(
+			&i.ID,
+			&i.Name,
+			&i.Cpu,
+			&i.Memory,
+			&i.Storage,
+			&i.Cluster,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getProject = `-- name: GetProject :one
 SELECT id, name, cpu, memory, storage, cluster
 FROM project

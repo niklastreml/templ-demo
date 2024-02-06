@@ -20,3 +20,5 @@ WHERE id = $1;
 -- name: CountProjects :one
 SELECT COUNT(*)
 FROM project;
+-- name: FuzzyFindProjects :many
+SELECT * FROM project WHERE similarity(name, $1) > 0.15;
