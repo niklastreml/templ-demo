@@ -1,0 +1,32 @@
+package components
+
+import "htmx-templ/database/sqlc"
+import "fmt"
+
+templ SearchResults(projects *[]sqlc.Project) {
+	if projects == nil {
+		<div id="searchresults"></div>
+	} else {
+		<div id="searchresults" class="absolute p-4 mt-1 bg-white shadow-md dark:bg-gray-700 w-96 rounded-b-md ">
+			if len(*projects) == 0 {
+				<p>
+					No results found
+				</p>
+			} else {
+				for _, project := range *projects {
+					<a class="border-b text-gray-900 text-sm dark:border-gray-600 focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2.5 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" href={ templ.SafeURL(fmt.Sprintf("/projects/%d", project.ID)) }>
+						<ul class="flex justify-between">
+							<span>
+								<span class="text-xs text-gray-700 dark:text-gray-400">Project</span>
+								<span>{ project.Name }</span>
+							</span>
+							<span>
+								@Badge(project.Cluster)
+							</span>
+						</ul>
+					</a>
+				}
+			}
+		</div>
+	}
+}

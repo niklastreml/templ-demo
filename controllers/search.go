@@ -3,6 +3,7 @@ package controllers
 import (
 	"htmx-templ/services/search"
 	"htmx-templ/views"
+	"htmx-templ/views/components"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -21,10 +22,13 @@ func (s *SearchController) Register(app *fiber.App) {
 
 func (s *SearchController) Search(c *fiber.Ctx) error {
 	query := c.Query("q")
+	if query == "" {
+		return views.Render(c, components.SearchResults(nil))
+	}
 	projects, err := s.ss.Projects(c.Context(), query)
 	if err != nil {
 		return err
 	}
 
-	return views.Render(c, views.Projects(projects))
+	return views.Render(c, components.SearchResults(&projects))
 }
