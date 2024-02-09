@@ -26,3 +26,4 @@ dist-ssr
 static/css/tailwind.css
 /tmp
 *_templ.go
+.env
