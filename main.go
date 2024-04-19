@@ -34,7 +34,7 @@ func main() {
 	}))
 	app.Use(logger.New())
 	app.Use(func(c *fiber.Ctx) error {
-		time.Sleep(500 * time.Millisecond)
+		time.Sleep(time.Second)
 		return c.Next()
 	})
 

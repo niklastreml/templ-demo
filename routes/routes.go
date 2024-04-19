@@ -18,6 +18,7 @@ func SetupControllers(app *fiber.App) {
 	controllers.NewIndex(ps).Register(app)
 	controllers.NewProjects(ps).Register(app)
 	controllers.NewSearch(ss).Register(app)
+	controllers.NewLogin().Register(app)
 	app.Use(NotFoundMiddleware)
 }
 
